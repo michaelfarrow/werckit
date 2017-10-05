@@ -1,9 +1,12 @@
 #!/bin/bash
 
+SERVICE_PRIMARY=${SERVICE_PRIMARY:-main}
+PIPELINE_PRIMARY=${PIPELINE_PRIMARY:-dev}
+
 containers_running="$(docker-compose ps -q)"
 [ ! -z "$containers_running" ] && echo "Removing running containers" && docker stop $containers_running
 
 docker-compose up --remove-orphans -d
-docker-compose run --service-ports --entrypoint "/app/.wercker/pipeline" main dev
+docker-compose run --service-ports --entrypoint "/app/.wercker/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
 docker-compose stop
 docker-compose rm -f
