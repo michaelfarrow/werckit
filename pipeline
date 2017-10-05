@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo 'echo -e "\033[0;32m====> Step:\033[0m $1"' > /usr/bin/step
+chmod +x /usr/bin/step
+cp /app/log /usr/bin/log
+echo 'export PS1="\u@container: "' > /root/.bashrc
+
+/app/pipeline-$1
