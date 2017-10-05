@@ -1,5 +1,13 @@
 #!/bin/bash
 
+pushd () {
+  command pushd "$@" > /dev/null
+}
+
+popd () {
+  command popd "$@" > /dev/null
+}
+
 mkdir /var/log/wercker
 
 cp /app/.wercker/step /usr/bin/step
@@ -20,9 +28,25 @@ if [[ $? -eq 0 ]]
 then
   export OFFLINE=false
   export ONLINE=true
-  echo -e "\033[1;32mONLINE\033[0m"
+  echo -e "connectivity: \033[1;32mONLINE\033[0m"
 else
-  echo -e "\033[1;31mOFFLINE\033[0m"
+  echo -e "connectivity: \033[1;31mOFFLINE\033[0m"
 fi
+
+pushd ../
+set -o allexport
+
+step "check environment"
+if [[ "$(cat ENVIRONMENT_LOCAL.template | xargs)" != "" && ! -f ENVIRONMENT_LOCAL ]]
+then
+  echo -e "\033[1;31mError:\033[0m No ENVIRONMENT_LOCAL present, please create one based on ENVIRONMENT_LOCAL.template" && exit 1
+fi
+
+step "setup environment"
+[[ -f ENVIRONMENT ]] && source ENVIRONMENT
+[[ -f ENVIRONMENT_LOCAL ]] && source ENVIRONMENT_LOCAL
+
+set +o allexport
+popd
 
 "/app/pipeline-$1"
