@@ -12,4 +12,17 @@ chmod +x /usr/bin/log
 echo 'export PS1="\u@container: "' > /root/.bashrc
 echo 'log' > /root/.bashrc
 
+step "checking connectivity"
+export OFFLINE=true
+export ONLINE=false
+wget -q --tries=10 --timeout=20 --spider http://google.com
+if [[ $? -eq 0 ]]
+then
+  export OFFLINE=false
+  export ONLINE=true
+  echo -e "\033[1;32mONLINE\033[0m"
+else
+  echo -e "\033[1;31mOFFLINE\033[0m"
+fi
+
 "/app/pipeline-$1"
