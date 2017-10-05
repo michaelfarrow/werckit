@@ -1,5 +1,4 @@
 #!/bin/bash
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 containers_running="$(docker-compose ps -q)"
 [ ! -z "$containers_running" ] && echo "Removing running containers" && docker stop $containers_running
