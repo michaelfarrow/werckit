@@ -5,4 +5,9 @@ clear
 echo -e "\033[0;32mViewing application log,\033[0m hit ctrl+c to end and return to the command line"
 echo ''
 
-tail -f -s 0.1 /var/log/pipeline.log 2>/dev/null
+for file in /var/log/wercker/*.log
+do
+  echo -ne "" > "$file"
+done
+
+tail -f -s 0.1 /var/log/wercker/*.log

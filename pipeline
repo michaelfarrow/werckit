@@ -1,8 +1,15 @@
 #!/bin/bash
 
-echo 'echo -e "\033[0;32m====> Step:\033[0m $1"' > /usr/bin/step
-chmod +x /usr/bin/step
-cp /app/log /usr/bin/log
-echo 'export PS1="\u@container: "' > /root/.bashrc
+mkdir /var/log/wercker
 
-/app/pipeline-$1
+cp /app/.wercker/step /usr/bin/step
+cp /app/.wercker/watch /usr/bin/watch
+cp /app/.wercker/log /usr/bin/log
+chmod +x /usr/bin/step
+chmod +x /usr/bin/watch
+chmod +x /usr/bin/log
+
+echo 'export PS1="\u@container: "' > /root/.bashrc
+echo 'log' > /root/.bashrc
+
+"/app/pipeline-$1"
