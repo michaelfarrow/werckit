@@ -37,7 +37,7 @@ pushd ../
 set -o allexport
 
 step "check environment"
-if [[ "$(cat ENVIRONMENT_LOCAL.template | xargs)" != "" && ! -f ENVIRONMENT_LOCAL ]]
+if [[ -f ENVIRONMENT_LOCAL.template && "$(cat ENVIRONMENT_LOCAL.template | xargs)" != "" && ! -f ENVIRONMENT_LOCAL ]]
 then
   error "No ENVIRONMENT_LOCAL present, please create one based on ENVIRONMENT_LOCAL.template" && exit 1
 fi
