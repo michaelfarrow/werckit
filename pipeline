@@ -23,8 +23,11 @@ export PATH="$DIR:$PATH"
 step "checking connectivity"
 export OFFLINE=true
 export ONLINE=false
+trap '' ERR
 wget -q --tries=10 --timeout=20 --spider http://google.com
-if [[ $? -eq 0 ]]
+wget_res=$?
+trap 'exit $?' ERR
+if [[ $wget_res -eq 0 ]]
 then
   export OFFLINE=false
   export ONLINE=true
