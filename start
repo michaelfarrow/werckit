@@ -1,5 +1,13 @@
 #!/bin/bash
 
+cleanup () {
+  docker-compose stop
+  docker-compose rm -f
+  exit
+}
+
+trap 'cleanup $?' ERR
+
 SERVICE_PRIMARY=${SERVICE_PRIMARY:-main}
 PIPELINE_PRIMARY=${PIPELINE_PRIMARY:-dev}
 
@@ -8,5 +16,4 @@ containers_running="$(docker-compose ps -q)"
 
 docker-compose up --remove-orphans -d
 docker-compose run --service-ports --entrypoint "/app/.wercker/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
-docker-compose stop
-docker-compose rm -f
+cleanup 0

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+trap 'exit $?' ERR
+
 pushd () {
   command pushd "$@" > /dev/null
 }
@@ -8,17 +10,15 @@ popd () {
   command popd "$@" > /dev/null
 }
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 mkdir /var/log/wercker
 
-cp /app/.wercker/step /usr/bin/step
-cp /app/.wercker/watch /usr/bin/watch
-cp /app/.wercker/log /usr/bin/log
-chmod +x /usr/bin/step
-chmod +x /usr/bin/watch
-chmod +x /usr/bin/log
+echo 'export PS1="\u@container: "' >> /root/.bashrc
+echo "export PATH=$DIR:\$PATH" >> /root/.bashrc
+echo 'log' >> /root/.bashrc
 
-echo 'export PS1="\u@container: "' > /root/.bashrc
-echo 'log' > /root/.bashrc
+export PATH="$DIR:$PATH"
 
 step "checking connectivity"
 export OFFLINE=true
@@ -39,7 +39,7 @@ set -o allexport
 step "check environment"
 if [[ "$(cat ENVIRONMENT_LOCAL.template | xargs)" != "" && ! -f ENVIRONMENT_LOCAL ]]
 then
-  echo -e "\033[1;31mError:\033[0m No ENVIRONMENT_LOCAL present, please create one based on ENVIRONMENT_LOCAL.template" && exit 1
+  error "No ENVIRONMENT_LOCAL present, please create one based on ENVIRONMENT_LOCAL.template" && exit 1
 fi
 
 step "setup environment"
@@ -49,4 +49,4 @@ step "setup environment"
 set +o allexport
 popd
 
-"/app/pipeline-$1"
+source "$DIR/../pipeline-$1"
