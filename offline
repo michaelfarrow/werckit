@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ "$OFFLINE" = true ]
+then
+  if [[ ! -d "$1" && ! -f "$1" ]]
+  then
+    error "offline and no local $1"
+    exit 1
+  else
+    echo Skipping
+  fi
+else
+  "${@:2}"
+fi
