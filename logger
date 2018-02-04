@@ -1,6 +1,6 @@
 #!/bin/bash
 
-WATCH_LOGFILE="/var/log/wercker/$1.log"
+WATCH_LOGFILE="/var/log/werckit/$1.log"
 
 touch "$WATCH_LOGFILE"
 "${@:2}" >> "$WATCH_LOGFILE" 2>&1 &

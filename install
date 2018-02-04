@@ -1,0 +1,22 @@
+#!/bin/bash
+
+INSTALL_LOC="/usr/local/bin/werckit"
+REPO_DIR="$HOME/.werckit"
+
+if [ ! -d "$REPO_DIR" ]
+then
+  git clone https://github.com/weyforth/werckit.git "$REPO_DIR"
+else
+  pushd "$REPO_DIR" > /dev/null
+  git pull origin master
+  popd > /dev/null
+fi
+
+cat << EOF > "$INSTALL_LOC"
+REPO_DIR="$REPO_DIR"
+[ ! -d "\$REPO_DIR" ] && echo "werckit repo not found at \$REPO_DIR" && exit 1
+cp -r "$REPO_DIR" .werckit
+.werckit/start
+EOF
+
+chmod +x "$INSTALL_LOC"

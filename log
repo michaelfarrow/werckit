@@ -5,9 +5,9 @@ clear
 echo -e "\033[0;32mViewing application log,\033[0m hit ctrl+c to end and return to the command line"
 echo ''
 
-for file in /var/log/wercker/*.log
+for file in /var/log/werckit/*.log
 do
   echo -ne "" > "$file"
 done
 
-tail -f -s 0.1 /var/log/wercker/*.log
+tail -f -s 0.1 /var/log/werckit/*.log

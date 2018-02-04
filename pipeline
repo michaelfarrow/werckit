@@ -12,7 +12,7 @@ popd () {
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-mkdir /var/log/wercker
+mkdir /var/log/werckit
 
 echo 'export PS1="\u@container: "' >> /root/.bashrc
 echo "export PATH=$DIR:\$PATH" >> /root/.bashrc

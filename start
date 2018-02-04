@@ -15,5 +15,5 @@ containers_running="$(docker-compose ps -q)"
 [ ! -z "$containers_running" ] && echo "Removing running containers" && docker stop $containers_running
 
 docker-compose up --remove-orphans -d
-docker-compose run --service-ports --entrypoint "/app/.wercker/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
+docker-compose run --service-ports --entrypoint "/app/.werckit/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
 cleanup 0
