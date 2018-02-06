@@ -18,7 +18,7 @@ echo 'export PS1="\u@container: "' >> /root/.bashrc
 echo "export PATH=$DIR:\$PATH" >> /root/.bashrc
 echo 'log' >> /root/.bashrc
 
-export PATH="$DIR:$PATH"
+export PATH="/opt/werckit:$PATH"
 
 step "checking connectivity"
 export OFFLINE=true
@@ -52,4 +52,9 @@ step "setup environment"
 set +o allexport
 popd
 
-source "$DIR/../pipeline-$1"
+pushd $PWD
+
+source "/app/pipeline-$1"
+
+step "log"
+bash

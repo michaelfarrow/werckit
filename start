@@ -1,8 +1,10 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 cleanup () {
   docker-compose stop
-  docker-compose rm -f
+  docker-compose rm -vf
   exit
 }
 
@@ -15,5 +17,5 @@ containers_running="$(docker-compose ps -q)"
 [ ! -z "$containers_running" ] && echo "Removing running containers" && docker stop $containers_running
 
 docker-compose up --remove-orphans -d
-docker-compose run --service-ports --entrypoint "/app/.werckit/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
+docker-compose run --service-ports  -v "$DIR:/opt/werckit" --entrypoint "/opt/werckit/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
 cleanup 0
