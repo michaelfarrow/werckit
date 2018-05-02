@@ -3,19 +3,13 @@
 INSTALL_LOC="/usr/local/bin/werckit"
 REPO_DIR="$HOME/.werckit"
 
-if [ -d ".git" ]
+if [ ! -d "$REPO_DIR" ]
 then
-  rm -rf "$REPO_DIR"
-  cp -r . "$REPO_DIR"
+  git clone https://github.com/weyforth/werckit.git "$REPO_DIR"
 else
-  if [ ! -d "$REPO_DIR" ]
-  then
-    git clone https://github.com/weyforth/werckit.git "$REPO_DIR"
-  else
-    pushd "$REPO_DIR" > /dev/null
-    git pull origin master
-    popd > /dev/null
-  fi
+  pushd "$REPO_DIR" > /dev/null
+  git pull origin master
+  popd > /dev/null
 fi
 
 cat << EOF > "$INSTALL_LOC"
