@@ -10,12 +10,30 @@ cleanup () {
 
 trap 'cleanup $?' ERR
 
-SERVICE_PRIMARY=${SERVICE_PRIMARY:-main}
 PIPELINE_PRIMARY=${PIPELINE_PRIMARY:-dev}
+SERVICE_PRIMARY=${SERVICE_PRIMARY:-main}
+WERCKER_ENV=''
+
+while [ "$1" != "" ]; do
+  case $1 in
+    -p | --pipeline ) shift
+                      PIPELINE_PRIMARY=$1
+                      ;;
+    -s | --service )  shift
+                      SERVICE_PRIMARY=$1
+                      ;;
+    -e | --env )      shift
+                      WERCKER_ENV="$WERCKER_ENV -e $1"
+                      ;;
+  esac
+  shift
+done
+
+# TODO: add usage
 
 containers_running="$(docker-compose ps -q)"
 [ ! -z "$containers_running" ] && echo "Removing running containers" && docker stop $containers_running
 
 docker-compose up --remove-orphans -d
-docker-compose run --service-ports  -v "$DIR:/opt/werckit" --entrypoint "/opt/werckit/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
+docker-compose run --service-ports  -v "$DIR:/opt/werckit" $WERCKER_ENV --entrypoint "/opt/werckit/pipeline" "$SERVICE_PRIMARY" "$PIPELINE_PRIMARY"
 cleanup 0

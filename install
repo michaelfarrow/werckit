@@ -15,7 +15,7 @@ fi
 cat << EOF > "$INSTALL_LOC"
 REPO_DIR="$REPO_DIR"
 [ ! -d "\$REPO_DIR" ] && echo "werckit repo not found at \$REPO_DIR" && exit 1
-"$REPO_DIR/start"
+"$REPO_DIR/start" "\$@"
 EOF
 
 chmod +x "$INSTALL_LOC"
